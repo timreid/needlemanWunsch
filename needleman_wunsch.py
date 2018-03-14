@@ -45,14 +45,25 @@ def needleman_wunsch(sequence_a, sequence_b, match_score, mismatch_score, indel_
             score_table[i][j] = max_score
             arrow_table[i][j] = arrows
 
-    print(np.array(arrow_table))
+    #print(np.array(arrow_table))
     alignment_a = []
     alignment_b = []
     i = m - 1
     j = n - 1
-    while (i, j) != (1, 1):
-        arrows = arrow_table[i][j]
+    stack = []
+    alignments = []
+    while True:
+        if (i, j) == (1, 1):
+            alignments.append((alignment_a, alignment_b))
+            if stack == []:
+                break
+            else:
+                (i, j, arrows, alignment_a, alignment_b) = stack.pop()
+        else:
+            arrows = list(arrow_table[i][j])
         arrow = arrows.pop()
+        if arrows != []:
+            stack.append((i, j, arrows, list(alignment_a), list(alignment_b)))
         if arrow == "↖":
             alignment_a.insert(0, sequence_a[i - 2])
             alignment_b.insert(0, sequence_b[j - 2])
@@ -69,7 +80,15 @@ def needleman_wunsch(sequence_a, sequence_b, match_score, mismatch_score, indel_
                     alignment_a.insert(0, " ")
                     j = j - 1
     alignment_score = score_table[m - 1][n - 1]
-    return (alignment_score, alignment_a, alignment_b)
+    return (alignment_score, alignments)
 
-print(needleman_wunsch(list("gattaca"), list("gcatgcu"), 1, -1, 0))
+def print_alignments(alignment_result):
+    (alignment_score, alignments) = alignment_result
+    print(alignment_score)
+    for (alignment_a, alignment_b) in alignments:
+        print(alignment_a)
+        print(alignment_b)
+        print()
+#print_alignments(needleman_wunsch(list("gattaca"), list("gcatgcu"), 1, -1, 0))
+print_alignments(needleman_wunsch(list("gattaca"), list("gcatgcu"), 1, -1, 0))
 #print(needleman_wunsch(list("fool"), list("foo"), 1, -1, 0))
