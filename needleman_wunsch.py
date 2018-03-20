@@ -15,7 +15,7 @@ def needleman_wunsch(sequence_a, sequence_b, match_score, mismatch_score, gap_sc
     "A general method applicable to the search for similarities in the amino acid sequence of two proteins".
     Journal of Molecular Biology.
     Args:
-    sequence a, sequence b: the two list of characters to be aligned
+    sequence a, sequence b: the two strings to be aligned
     match_score: the score given to a match between two equal characters
     mismatch_score: the score given to a match between two unequal characters
     gap_score: the score given to a match between a character and a gap
